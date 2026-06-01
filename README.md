@@ -20,7 +20,8 @@ Or set the key in your environment first:
 export ANTHROPIC_API_KEY=your_key_here
 streamlit run app.py
 ```
-
+<img width="1903" height="974" alt="image" src="https://github.com/user-attachments/assets/d1188a8f-450b-4348-88ec-dd510814bddb" />
+Live demo link ([Live Demo](https://songmind-ai.streamlit.app))
 ## Features
 
 - 📸 Upload any image — scene, landscape, selfie — Claude analyzes it visually
