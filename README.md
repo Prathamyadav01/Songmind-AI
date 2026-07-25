@@ -1,45 +1,44 @@
-# 🎵 SongMind AI — Streamlit App
+# 🎵 SongMind AI — Multimodal Emotion-Based Song Recommender
 
-ML-powered song recommendations from images & mood text, following the full 9-step ML workflow.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B.svg)](https://streamlit.io/)
+[![DeepFace](https://img.shields.io/badge/DeepFace-Vision-green.svg)](https://github.com/serengil/deepface)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow.svg)](https://huggingface.co/)
 
-## Setup
+**SongMind AI** is an end-to-end multimodal recommendation system that analyzes real-time facial expressions from a webcam feed alongside contextual user chat messages to serve personalized song recommendations. 
 
-```bash
-pip install -r requirements.txt
-```
+Instead of relying solely on past listening history, SongMind AI captures the user's **immediate emotional state** using a combination of Computer Vision, Zero-Shot Natural Language Processing, and Cosine Similarity vector matching.
 
-## Run
+---
 
-```bash
-ANTHROPIC_API_KEY=your_key_here streamlit run app.py
-```
+## 🏗️ System Architecture
 
-Or set the key in your environment first:
-
-```bash
-export ANTHROPIC_API_KEY=your_key_here
-streamlit run app.py
-```
-
-
-Live demo link:
-([Live Demo](https://songmind-ai-jmow2llcavaot4ojrxmqxp.streamlit.app))
-## Features
-
-- 📸 Upload any image — scene, landscape, selfie — Claude analyzes it visually
-- 💬 Describe your mood in natural language
-- 🎭 Quick mood tag chips (Happy, Chill, Sad, etc.)
-- 🧠 Full 9-step ML pipeline visualized in real-time
-- 🎧 5 ranked song recommendations with match scores & mood/energy bars
-
-## ML Workflow Steps Shown
-
-1. **Define Problem** — Recommend songs by classifying mood from uploaded images and text descriptions.
-2. **Collect & Understand Data** — Gather user inputs: scene photos, mood text, and quick-select emotion tags.
-3. **Data Preprocessing** — Normalize image colors, encode mood tags (one-hot), and extract text sentiment scores.
-4. **Feature Engineering** — Generate CLIP visual embeddings, TF-IDF text vectors, and combine into one feature vector.
-5. **Split the Data** — Apply stratified 80/10/10 split across mood categories to preserve class balance.
-6. **Choose & Train Model** — Train a gradient-boosted ranker on the mood-song interaction matrix with 5-fold CV.
-7. **Evaluate the Model** — Measure NDCG@10 on validation set and check train-val gap for overfitting signs.
-8. **Tune Hyperparameters** — Run Bayesian search to optimize regularization (λ) and embedding dimensions.
-9. **Deploy & Monitor** — Serve recommendations via Claude's multimodal inference pipeline and watch for mood-drift patterns.
+```text
+┌───────────────────────────┐      ┌──────────────────────────┐
+│  Live Camera / Selfie     │      │   User Chat / Sentiment  │
+└─────────────┬─────────────┘      └────────────┬─────────────┘
+              │                                 │
+              ▼                                 ▼
+┌───────────────────────────┐      ┌──────────────────────────┐
+│  DeepFace (CNN Engine)    │      │ DistilBERT Zero-Shot NLP │
+│  Detects Visual Emotion   │      │ Interprets Text Context  │
+└─────────────┬─────────────┘      └────────────┬─────────────┘
+              │                                 │
+              └────────────────┬────────────────┘
+                               │
+                               ▼
+              ┌─────────────────────────────────┐
+              │     Multimodal Feature Fusion   │
+              │ Calculates Target (V_user, E_user)│
+              └────────────────┬────────────────┘
+                               │
+                               ▼
+              ┌─────────────────────────────────┐
+              │ Cosine Similarity Vector Engine │
+              │   Ranks Spotify Dataset Songs   │
+              └────────────────┬────────────────┘
+                               │
+                               ▼
+              ┌─────────────────────────────────┐
+              │ 🎧 Top Ranked Recommendations   │
+              └─────────────────────────────────┘
